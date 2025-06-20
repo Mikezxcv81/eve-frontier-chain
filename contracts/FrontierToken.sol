@@ -2,13 +2,12 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 
 /// @title FrontierToken (TRIBE) – EVE Frontier-ready ERC-20
-/// @notice Adds EIP-2612, snapshot voting and role-gated minting so Smart
-///         Assemblies or your Tribe DAO can mint rewards on Redstone / Garnet.
+/// @dev Uses OpenZeppelin 4.9.x; adds Permit, Votes, role-gated minting
 contract FrontierToken is
     ERC20Permit,
     ERC20Burnable,
@@ -17,7 +16,6 @@ contract FrontierToken is
 {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
-    /// @param treasury address that will hold the initial 1 000 000 supply
     constructor(address treasury)
         ERC20("Tribe Token", "TRIBE")
         ERC20Permit("Tribe Token")
@@ -25,10 +23,10 @@ contract FrontierToken is
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(MINTER_ROLE, treasury);
 
-        _mint(treasury, 1_000_000 ether); // 18-decimals
+        _mint(treasury, 1_000_000 ether);        // 18 decimals
     }
 
-    /* ────────────  external mint  ──────────── */
+    /*───────── external ─────────*/
     function mint(address to, uint256 amount)
         external
         onlyRole(MINTER_ROLE)
@@ -36,12 +34,11 @@ contract FrontierToken is
         _mint(to, amount);
     }
 
-    /* ────────────  ERC20Votes hooks  ──────────── */
-    function _afterTokenTransfer(
-        address from,
-        address to,
-        uint256 amount
-    ) internal override(ERC20, ERC20Votes) {
+    /*───────── ERC20Votes hooks (OZ 4.9) ─────────*/
+    function _afterTokenTransfer(address from, address to, uint256 amount)
+        internal
+        override(ERC20, ERC20Votes)
+    {
         super._afterTokenTransfer(from, to, amount);
     }
 
