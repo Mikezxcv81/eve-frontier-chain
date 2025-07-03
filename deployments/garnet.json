@@ -1,0 +1,8 @@
+{
+  "network": "garnet",
+  "deployer": "0xfcFb1c2f8B55262244a94bBC563CAE170DB740a7",
+  "treasury": "0xfcFb1c2f8B55262244a94bBC563CAE170DB740a7",
+  "token": "0x8aB7921B03FA70D45796Ba5e23F0b3d244ddB380",
+  "rewardMinter": "0xCb48AC9AE170855F07C2929c755dF5f45e3b9707",
+  "sinkManager": "0x0cD69D786d73324Dc2d4BeD37233535596d36EBb"
+}
